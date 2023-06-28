@@ -1,0 +1,32 @@
+//mat-form-field label {
+//  font-size: 20px;
+//}
+//
+//mat-form-field.mat-form-field-should-float label {
+//  font-size: 13px;
+//}
+//
+
+
+.select-container {
+
+  position: relative;
+}
+.select-control,
+.select-loading {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.select-loading {
+  z-index: 10;
+}
+
+//td.mat-cell {
+//
+//  padding: 8px;
+//
+//}

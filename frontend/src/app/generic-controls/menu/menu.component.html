@@ -1,0 +1,25 @@
+<nav class="m-0">
+  <div class="flex flex-wrap">
+    <div class="px-2 h-10 bg-nurse-app-900 font-light flex items-center">
+      <button data-test="menu-home-button" class="mx-auto" mat-icon-button routerLink="/patient-list">
+        <mat-icon data-test="menu-menu-icon" class="scale-100 text-white">home</mat-icon>
+      </button>
+    </div>
+
+    <div class="grow h-10 bg-nurse-app-900">
+    </div>
+
+    <div class="flex items-center h-10 px-8 bg-nurse-app-900 text-white">
+      {{username}}
+    </div>
+
+    <div class="h-10 px-4 font-light flex items-center bg-nurse-app-900">
+      <div>
+        <button mat-menu-item data-test="menu-logout-button" (click)="onLogout()">
+          <span class="text-white text-sm">LOGOUT</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</nav>

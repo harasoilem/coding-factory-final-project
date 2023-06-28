@@ -1,0 +1,22 @@
+<div class="p-0 h-full min-h-screen flex bg-nurse-app-100 items-center">
+  <div class="mx-auto w-full md:w-1/3 p-4  max-w-fit items-start flex flex-wrap pt-8">
+    <div class="pl-8 pt-5 font-noto-serif-display flex-auto" [formGroup]="loginForm">
+      <div class="text-nurse-app-pink-dark text-4xl font-light pb-16">
+        Nurse App
+      </div>
+
+      <app-dynamic-form-field *ngFor="let field of fields" [form]="loginForm"
+                              [field]="field" [ngClass]="field.classes"
+                              [readonly]="this.loading" (keyup.enter)="login()"></app-dynamic-form-field>
+
+
+      <div class="w-full flex-auto">
+        <div class="float-right pt-12">
+          <app-flat-button extraClasses="bg-nurse-app-pink-dark" data-test="submit" label="ΣΥΝΔΕΣΗ"
+                           (click)="login()" [isLoading]="loading"></app-flat-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

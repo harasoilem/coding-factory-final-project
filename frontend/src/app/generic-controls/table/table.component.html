@@ -1,0 +1,60 @@
+<div [style]="tableStyle" class="block w-full overflow-auto scrolling-touch">
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar>
+  <table mat-table [dataSource]="dataSource" matSort [matSortDisabled]="disableSort" class="w-full">
+    <template *ngFor="let displayedColumn of displayedColumns; index as i;">
+      <ng-container *ngIf="i == 0" [matColumnDef]="displayedColumn">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+          <button mat-button (click)="showInfo(element)"
+                  [attr.data-test]="tableName() + '-info-button'">
+            <fa-icon *ngIf="infoIcon != null" size="xl" class="accent-color" [icon]="infoIcon"></fa-icon>
+          </button>
+        </td>
+      </ng-container>
+      <ng-container
+        *ngIf="i != 0 && displayedColumn != 'delete' && displayedColumn != 'copy' && displayedColumn.indexOf('_icon') < 0 "
+        [matColumnDef]="displayedColumn">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{columns[i]?.displayName}}</th>
+        <td mat-cell *matCellDef="let element"
+            [attr.data-test]="tableName()+'-'+ columns[i].name + '-column'"> {{ getProperty(element, columns[i]) }} </td>
+      </ng-container>
+
+      <ng-container *ngIf="displayedColumn.indexOf('_icon') >= 0" [matColumnDef]="displayedColumn">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{columns[i]?.displayName}}</th>
+        <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+          <button mat-button [matTooltip]="getPropertyTooltip(element, columns[i])"
+                  [attr.data-test]="tableName()+'-'+ columns[i].name + '-button'">
+            <fa-icon
+              size="xl"
+              *ngIf="getPropertyIcon(element, columns[i]) != null"
+              [icon]="getPropertyIcon(element, columns[i])"
+              [className]="getPropertyColor(element, columns[i])">
+            </fa-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="displayedColumn == 'copy'" [matColumnDef]="displayedColumn">
+        <th mat-header-cell *matHeaderCellDef>{{columns[i]?.displayName}}</th>
+        <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()"
+            [attr.data-test]="tableName()+'-'+ columns[i].name + '-button'">
+          <button mat-button (click)="copyItem(element)">
+            <fa-icon class="accent-color" size="xl" [icon]="copy"></fa-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="displayedColumn == 'delete'" [matColumnDef]="displayedColumn">
+        <th mat-header-cell *matHeaderCellDef>{{columns[i]?.displayName}}</th>
+        <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()"
+            [attr.data-test]="tableName()+'-'+ columns[i].name + '-button'">
+          <button mat-button (click)="deleteItem(element)">
+            <fa-icon [icon]="delete" size="xl" class="error-color"></fa-icon>
+          </button>
+        </td>
+      </ng-container>
+    </template>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngStyle]="getBackgroundColor(row)"></tr>
+  </table>
+</div>

@@ -1,0 +1,13 @@
+<button class="relative font-roboto h-10 rounded-sm items-center flex" [ngClass]="getExtraClasses()"
+        (click)="onClick()">
+
+  <mat-icon [ngClass]="getIconExtraClasses()" *ngIf="hasIcon"
+            class="">{{iconName}}</mat-icon>
+  <span [ngClass]="isLoading ? 'opacity-0' : 'opacity-100'" class="m-0 p-0">{{label}}</span>
+
+  <mat-spinner *ngIf="isLoading"
+               class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+               data-test="flat-button-loading-spinner"
+               [diameter]="20"
+               [ngClass]="getTextColorClass()"></mat-spinner>
+</button>

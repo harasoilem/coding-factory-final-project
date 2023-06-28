@@ -1,0 +1,25 @@
+<mat-card appearance="outlined" class="w-full">
+  <mat-card-header class="pb-4">
+    <mat-card-title>{{name.charAt(0).toUpperCase() + name.slice(1)}}
+      <button mat-flat-button color="accent" class="ml-4" (click)="createNew()"
+              [attr.data-test]="'card-table-add-new-' + name.toLowerCase().replace(' ','-').replace(' ','-').replace(' ','-').replace(' ','-')">
+        <mat-icon>add</mat-icon>
+        Add new {{name}}
+      </button>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-table
+      [infoUrl]="infoUrl"
+      [columns]="columns"
+      [displayedColumns]="displayedColumns"
+      [infoIcon]="infoIcon"
+      [tableDataSource]="dataSource"
+      (deleteEvent)="deleteEvent.emit($event)"
+      (copyEvent)="copyEvent.emit($event)"
+      (infoEvent)="infoEvent.emit($event)"
+      [highlightColorPath]="highlightColorPath"
+    ></app-table>
+  </mat-card-content>
+
+</mat-card>

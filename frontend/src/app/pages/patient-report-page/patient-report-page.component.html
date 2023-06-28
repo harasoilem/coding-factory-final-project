@@ -1,0 +1,54 @@
+<div class="sticky top-0 z-10">
+  <app-menu></app-menu>
+</div>
+
+<div class="flex-auto">
+  <div style="max-width: 1600px" class="container mx-auto mt-[60px]">
+    <div class="flex flex-wrap ">
+      <mat-card appearance="outlined" class="w-full">
+        <mat-card-content>
+
+          <div class="flex items-end text-xl py-8">
+            <div>
+              <ul>
+                <li [routerLink]="['/patient', patient.id]"
+                    data-test="patient-link">
+                  <button mat-icon-button>
+                    <mat-icon>person</mat-icon>
+                  </button>
+                </li>
+                <li>ΟΝΟΜΑΤΕΠΩΝΥΜΟ: {{patient.last_name}} {{patient.first_name}}</li>
+                <li>ΑΜΚΑ: {{patient.amka}}</li>
+                <li>ΗΜΕΡΟΜΗΝΙΑ ΓΕΝΝΗΣΗΣ: {{patient.date_of_birth | date}}</li>
+              </ul>
+            </div>
+            <div class="grow"></div>
+            <div>
+              <ul>
+                <li *ngIf="!this.isAddNew && patient.id">ΗΜΕΡΟΜΗΝΙΑ / ΩΡΑ ΕΝΗΜΕΡΩΣΗΣ: {{patient.updated_at |  date:'medium' }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap pt-8">
+
+            <app-dynamic-form-field *ngFor="let field of fields" [form]="dynamicForm"
+                                    [field]="field" [ngClass]="field.classes"
+                                    [readonly]="this.loading"></app-dynamic-form-field>
+
+          </div>
+        </mat-card-content>
+        <mat-card-footer>
+          <div class="flex flex-wrap  mb-4 mt-3 ml-0 mr-2">
+            <div class="w-3/4"></div>
+            <div class="w-1/4 px-4">
+              <app-flat-button class="float-right" extraClasses="bg-nurse-app-pink-dark"
+                               data-test="save-patient-report-button" label="ΑΠΟΘΗΚΕΥΣΗ"
+                               (click)="onSave()" [isLoading]="loading"></app-flat-button>
+            </div>
+          </div>
+        </mat-card-footer>
+      </mat-card>
+    </div>
+  </div>
+</div>

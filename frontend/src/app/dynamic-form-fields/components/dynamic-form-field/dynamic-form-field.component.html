@@ -1,0 +1,150 @@
+<div [formGroup]="form" [ngSwitch]="field?.controlType" class="w-full font-roboto">
+
+  <div *ngSwitchCase="'none'" class="w-full">
+  </div>
+
+  <div *ngSwitchCase="'textbox'" class="w-full">
+    <div *ngIf="field.label" class="pb-2">
+      <div class="border-[1px] border-nurse-app-pink py-2 px-4 bg-gray-100">
+        <div class="text-nurse-app-pink-dark font-medium text-xs">{{field.label}}</div>
+      </div>
+    </div>
+    <mat-form-field appearance="outline" class="w-full" [subscriptSizing]="getSubscriptSizing()"
+                    [attr.data-test]="field.key">
+      <!--    <mat-label>{{field.label}}</mat-label>-->
+      <input [formControl]="control" [type]="field.type"
+             [maxlength]="field.maxLength"
+             [placeholder]="field.placeholder" [readonly]="readonly" (keyup.enter)="onEnter()" matInput>
+      <mat-icon *ngIf="!this.isPasswordField && field.icon != 'none' && field.icon.slice(0,3) != 'fa-'" matSuffix
+                class="gray-icon">{{field.icon}}</mat-icon>
+      <mat-icon *ngIf="!this.isPasswordField && field.icon.slice(0,3) == 'fa-'" matSuffix class="gray-icon"
+                fontSet="fas"
+                [fontIcon]="field.icon"></mat-icon>
+      <button *ngIf="this.isPasswordField" mat-icon-button matSuffix (click)="togglePasswordVisibility()"
+              [disabled]="this.readonly">
+        <mat-icon class="gray-icon">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="control.hasError('required') && customRequiredError == null">{{field.label}} is required
+      </mat-error>
+      <mat-error *ngIf="control.hasError('required') && customRequiredError != null">{{customRequiredError}}</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div *ngSwitchCase="'dropdown'" class="select-container w-full">
+    <div *ngIf="field.label" class="pb-2">
+      <div class="border-[1px] border-nurse-app-pink py-2 px-4 bg-gray-100">
+        <div class="text-nurse-app-pink-dark font-medium text-xs">{{field.label}}</div>
+      </div>
+    </div>
+    <div *ngIf="loadingOptions" class="select-loading text-center align-content-center"
+         [attr.data-test]="field.key+'-loading'">
+      <mat-spinner style="margin:15px auto; " diameter="30"></mat-spinner>
+    </div>
+    <mat-form-field appearance="outline" class="w-full" [subscriptSizing]="getSubscriptSizing()"
+                    [attr.data-test]="field.key">
+      <!--      <mat-label>{{field.label}}</mat-label>-->
+      <mat-select [formControl]="control" [multiple]="field.isMultiSelect">
+        <!--      <mat-select [formControl]="control" [errorStateMatcher]="matcher">-->
+        <mat-option *ngIf="!field.isMultiSelect && field.hasClear" [value]="null"
+                    [attr.data-test]="field.key + '-dropdown-clear-selection'">
+          Clear
+        </mat-option>
+        <mat-option *ngFor="let opt of field.options"
+                    [value]="opt.value"
+                    [attr.data-test]="field.key + '-dropdown-option'"
+        >{{opt.displayValue}}</mat-option>
+      </mat-select>
+      <mat-icon *ngIf="field.icon != 'none'" matSuffix class="gray-icon">{{field.icon}}</mat-icon>
+      <!--      <mat-hint>Errors appear instantly!</mat-hint>-->
+      <mat-error *ngIf="control.hasError('required') && customRequiredError == null">You must make a selection
+      </mat-error>
+      <mat-error *ngIf="control.hasError('required') && customRequiredError != null">{{customRequiredError}}</mat-error>
+    </mat-form-field>
+  </div>
+
+
+  <!--  <mat-checkbox *ngSwitchCase="'checkbox'" [formControl]="control" [value]="field.value"-->
+  <!--                [disableControl]="readonly">{{field.label}}-->
+  <!--  </mat-checkbox>-->
+
+
+  <mat-form-field *ngSwitchCase="'checkbox'" [subscriptSizing]="getSubscriptSizing()" appearance="outline"
+                  class="w-full" [attr.data-test]="field.key">
+    <mat-label>{{field.label}}</mat-label>
+    <mat-select [formControl]="control">
+      <mat-option [value]="true" [attr.data-test]="field.key+'option-yes'">Yes</mat-option>
+      <mat-option [value]="false" [attr.data-test]="field.key+'option-no'">No</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngSwitchCase="'textarea'" class="w-full">
+    <div *ngIf="field.label" class="pb-2">
+      <div class="border-[1px] border-nurse-app-pink py-2 px-4 bg-gray-100">
+        <div class="text-nurse-app-pink-dark font-medium text-xs">{{field.label}}</div>
+      </div>
+    </div>
+    <mat-form-field appearance="outline" [subscriptSizing]="getSubscriptSizing()" class="w-full"
+                    [attr.data-test]="field.key">
+      <!--      <mat-label>{{field.label}}</mat-label>-->
+      <textarea matNativeControl [formControl]="control" [placeholder]="field.placeholder"
+                [readonly]="readonly"
+                [maxlength]="field.maxLength"
+                [rows]="field.rows"></textarea>
+      <mat-error *ngIf="control.hasError('required') && customRequiredError == null">{{field.label}} is required
+      </mat-error>
+      <mat-error *ngIf="control.hasError('required') && customRequiredError != null">{{customRequiredError}}</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div *ngSwitchCase="'datepicker'" class="w-full">
+    <div *ngIf="field.label" class="pb-2">
+      <div class="border-[1px] border-nurse-app-pink py-2 px-4 bg-gray-100">
+        <div class="text-nurse-app-pink-dark font-medium text-xs">{{field.label}}</div>
+      </div>
+    </div>
+    <mat-form-field *ngSwitchCase="'datepicker'" appearance="outline" [subscriptSizing]="getSubscriptSizing()"
+                    class="w-full" [attr.data-test]="field.key">
+      <!--    <mat-label>{{field.label}}</mat-label>-->
+      <input matInput [formControl]="control" [placeholder]="field.placeholder" [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker
+      ></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+
+  <!--  <mat-form-field *ngSwitchCase="'timepicker'" appearance="outline" class="w-full" [attr.data-test]="field.key">-->
+  <!--    <mat-label>{{field.label}}</mat-label>-->
+
+  <!--    <input matInput [formControl]="control" [placeholder]="field.placeholder" [format]="24"-->
+  <!--           [ngxTimepicker]="toggleTimepicker" [disableClick]="true">-->
+  <!--    <ngx-material-timepicker-toggle matSuffix [for]="toggleTimepicker">-->
+  <!--      <mat-icon class="gray-icon">{{field.icon}}</mat-icon>-->
+  <!--    </ngx-material-timepicker-toggle>-->
+  <!--    <ngx-material-timepicker #toggleTimepicker></ngx-material-timepicker>-->
+  <!--  </mat-form-field>-->
+
+  <div *ngSwitchCase="'autocomplete'" class="w-full">
+    <div *ngIf="field.label" class="pb-2">
+      <div class="border-[1px] border-nurse-app-pink py-2 px-4 bg-gray-100">
+        <div class="text-nurse-app-pink-dark font-medium text-xs">{{field.label}}</div>
+      </div>
+    </div>
+    <mat-form-field appearance="outline" class="w-full" [subscriptSizing]="getSubscriptSizing()"
+                    [attr.data-test]="field.key">
+      <!--      <mat-label>{{field.label}}</mat-label>-->
+      <input type="text" matInput [formControl]="control" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+        <mat-option *ngFor="let option of filteredOptions | async"
+                    [value]="option.value"
+                    [attr.data-test]="field.key+'-autocomplete-option'">
+          {{option.displayValue}}
+        </mat-option>
+      </mat-autocomplete>
+      <button matSuffix mat-icon-button (click)="control.setValue('')">
+        <mat-icon class="gray-icon">backspace</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+</div>
